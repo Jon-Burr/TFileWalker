@@ -3,19 +3,13 @@
 
 namespace TFileWalker {
   RegexRule::RegexRule(
-      const boost::regex& pattern,
-      const std::string& target,
-      bool useFName) :
-    m_pattern(pattern),
-    m_targetFmt(target),
-    m_useFName(useFName)
-  {}
-
-  RegexRule::RegexRule(
       const std::string& pattern,
       const std::string& target,
       bool useFName) :
-    RegexRule(boost::regex(pattern), target, useFName)
+    m_patternStr(pattern),
+    m_pattern(pattern),
+    m_targetFmt(target),
+    m_useFName(useFName)
   {}
 
   RegexRule::~RegexRule() {}
@@ -38,11 +32,12 @@ namespace TFileWalker {
   {
     Path usedPath = m_useFName ? path : path.internalPath();
     boost::smatch results;
-    if (boost::regex_match(usedPath.fullName(), results, m_pattern) )
-      return {
-        key.ReadObj(),
-        path,
-        m_targetFmt.empty() ? usedPath : Path(results.format(m_targetFmt))};
+    if (boost::regex_match(usedPath.fullName(), results, m_pattern) ) {
+      Path output = path;
+      if (!m_targetFmt.empty() )
+        output = results.format(m_targetFmt);
+      return {key.ReadObj(), path, output};
+    }
     else
       return {};
   }

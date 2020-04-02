@@ -4,7 +4,7 @@
 #include "TFileWalker/Rule.h"
 #include "TFileWalker/FileHandler.h"
 #include "TFileWalker/OutputHandler.h"
-#include "TFileWalker/TDirHandler.h"
+#include "TFileWalker/TDirHandle.h"
 #include <vector>
 #include <memory>
 
@@ -20,7 +20,7 @@ namespace TFileWalker {
 
       /// Walk through an input directory with the specified rules
       void walk(
-          std::shared_ptr<const TDirHandler> input,
+          std::shared_ptr<const TDirHandle> input,
           const std::vector<Rule*>& rules);
 
       OutputHandler& outputHandler() { return m_output; }

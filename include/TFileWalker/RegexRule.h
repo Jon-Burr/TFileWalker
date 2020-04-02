@@ -9,10 +9,6 @@ namespace TFileWalker {
   class RegexRule : public Rule {
     public:
       RegexRule(
-          const boost::regex& pattern,
-          const std::string& target="",
-          bool useFName=true);
-      RegexRule(
           const std::string& pattern,
           const std::string& target="",
           bool useFName=true);
@@ -32,6 +28,7 @@ namespace TFileWalker {
           const FoundObject& obj, FileHandler& output) const override;
 
     private:
+      std::string m_patternStr;
       boost::regex m_pattern;
       std::string m_targetFmt;
       bool m_useFName;

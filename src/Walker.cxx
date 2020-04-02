@@ -3,6 +3,7 @@
 
 #include <iterator>
 #include <algorithm>
+#include <iostream>
 
 namespace TFileWalker {
   Walker::Walker(
@@ -18,12 +19,18 @@ namespace TFileWalker {
     for (std::unique_ptr<Rule>& rule : m_rules)
       if (rule->useFile(fileName) )
         rules.push_back(rule.get() );
-    walk(input.getFile(fileName, false), rules);
+    if (rules.size() > 0) {
+      std::cout << "Start file " << fileName << std::endl;
+      walk(input.getFile(fileName, false), rules);
+      std::cout << "End file " << std::endl;
+    }
+    else
+      std::cout << "No rules match file " << fileName << std::endl;
     input.releaseFile(fileName);
   }
 
   void Walker::walk(
-      std::shared_ptr<const TDirHandler> input,
+      std::shared_ptr<const TDirHandle> input,
       const std::vector<Rule*>& rules) {
     if (!input)
       throw std::runtime_error(
@@ -38,6 +45,8 @@ namespace TFileWalker {
             [keyPath] (Rule* rule) { return rule->useDir(keyPath); });
         if (dirRules.size() > 0)
           walk(input->getSubDir(key.GetName() ), dirRules);
+        else
+          std::cout << "No rules match " << keyPath.fullName() << ", " << keyPath.internalPath().fullName() << std::endl;
       }
       else {
         for (Rule* rule : rules)

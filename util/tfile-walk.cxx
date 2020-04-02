@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
   TFileWalker::FileHandler inputHandler(inputLoc, "READ");
 
   TFileWalker::Walker walker(
-      TFileWalker::RuleParser::parseFile(rulesTxt),
+      TFileWalker::RuleParser::parseFile(rulesTxt, !noFileNameInRules),
       TFileWalker::OutputHandler(output, overwrite ? "RECREATE" : "CREATE") );
 
   for (const std::string& fileName : inputFiles)

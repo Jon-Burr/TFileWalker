@@ -1,12 +1,12 @@
-#ifndef TFileWalker_TDirHandler_H
-#define TFileWalker_TDirHandler_H
+#ifndef TFileWalker_TDirHandle_H
+#define TFileWalker_TDirHandle_H
 
 #include <TDirectory.h>
 #include "TFileWalker/Path.h"
 #include <memory>
 
 namespace TFileWalker {
-  class TDirHandler : public std::enable_shared_from_this<TDirHandler> {
+  class TDirHandle : public std::enable_shared_from_this<TDirHandle> {
     public:
       /**
        * @brief Create the handler from its path and the contained directory
@@ -14,15 +14,15 @@ namespace TFileWalker {
        * @param dir The TDirectory
        * @param parent The parent FileHandler
        */
-      TDirHandler(
+      TDirHandle(
           const Path& path,
-          TDirectory& dir,
-          std::shared_ptr<const TDirHandler> parent);
+          TDirectory* dir,
+          std::shared_ptr<const TDirHandle> parent);
 
-      TDirHandler(const TDirHandler& other) = delete;
+      TDirHandle(const TDirHandle& other) = delete;
 
       /// Destructor, closes the directory
-      ~TDirHandler();
+      ~TDirHandle();
 
       /// The path from the start position of the parent fileHandler
       const Path& path() const { return m_path; }
@@ -32,28 +32,28 @@ namespace TFileWalker {
 
       TDirectory* directory() { return m_dir; }
 
-      std::shared_ptr<const TDirHandler> parent() const { return m_parent; }
+      std::shared_ptr<const TDirHandle> parent() const { return m_parent; }
 
       /**
-       * @brief Get a TDirHandler for a subdirectory
+       * @brief Get a TDirHandle for a subdirectory
        * @param name The name of the subdirectory
        * @param bool allowMissing If true, throw an error if the directory
        * doesn't exist
        *
        * If the directory doesn't exist, a null handler will be returned
        */
-      std::shared_ptr<const TDirHandler> getSubDir(
+      std::shared_ptr<const TDirHandle> getSubDir(
           const std::string& name, bool allowMissing=false) const;
 
       /**
-       * @brief Get a TDirHandler for a subdirectory
+       * @brief Get a TDirHandle for a subdirectory
        * @param name The name of the subdirectory
        * @param bool allowMissing If true, throw an error if the directory
        * doesn't exist
        *
        * If the directory doesn't exist, a null handler will be returned
        */
-      std::shared_ptr<TDirHandler> getSubDir(
+      std::shared_ptr<TDirHandle> getSubDir(
           const std::string& name, bool allowMissing=false);
 
       /**
@@ -62,15 +62,17 @@ namespace TFileWalker {
        *
        * If name is empty, a reference to this is returned
        */
-      std::shared_ptr<TDirHandler> getMkDir(const std::string& name);
-      std::shared_ptr<TDirHandler> getMkDir(const Path& path) {
+      std::shared_ptr<TDirHandle> getMkDir(const std::string& name);
+      std::shared_ptr<TDirHandle> getMkDir(const Path& path) {
         return getMkDir(path.dirPath() );
       }
-    private:
+    protected:
       Path m_path;
       TDirectory* m_dir;
-      std::shared_ptr<const TDirHandler> m_parent;
-  }; //> end class TDirHandler
+      std::shared_ptr<const TDirHandle> m_parent;
+      /// Keep all already created children
+      mutable std::map<std::string, std::weak_ptr<TDirHandle>> m_children;
+  }; //> end class TDirHandle
 }; //> end namespace TFileWalker
 
-#endif //> !TFileWalker_TDirHandler_H
+#endif //> !TFileWalker_TDirHandle_H

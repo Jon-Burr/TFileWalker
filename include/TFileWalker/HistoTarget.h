@@ -15,7 +15,7 @@ namespace TFileWalker {
        */
       HistoTarget(
           const std::string& outputName,
-          std::shared_ptr<TDirHandler> tdir,
+          std::shared_ptr<TDirHandle> tdir,
           const TH1* histo);
 
       ~HistoTarget() override;

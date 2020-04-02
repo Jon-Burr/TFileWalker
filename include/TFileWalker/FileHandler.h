@@ -2,7 +2,8 @@
 #define TFileWalker_FileHandler_H
 
 #include "TFileWalker/Path.h"
-#include "TFileWalker/TDirHandler.h"
+#include "TFileWalker/TDirHandle.h"
+#include "TFileWalker/TFileHandle.h"
 #include <TFile.h>
 #include <memory>
 
@@ -31,7 +32,7 @@ namespace TFileWalker {
        * The handler keeps shared pointers to all files that it has opened. To
        * remove one from this collection, used the @see releaseFile function
        */
-      std::shared_ptr<TDirHandler> getFile(
+      std::shared_ptr<TFileHandle> getFile(
           const std::string& name, bool allowMissing=false);
 
       /**
@@ -40,7 +41,7 @@ namespace TFileWalker {
        *
        * Gets the file containing the provided path
        */
-      std::shared_ptr<TDirHandler> getFile(
+      std::shared_ptr<TFileHandle> getFile(
           const Path& path, bool allowMissing=false);
 
       /**
@@ -51,14 +52,14 @@ namespace TFileWalker {
        * After this, the handler knows nothing about this file anymore, so there
        * is nothing to stop it opening it a second time!
        */
-      std::shared_ptr<TFile> releaseFile(const std::string& name);
+      std::shared_ptr<TFileHandle> releaseFile(const std::string& name);
 
-      std::shared_ptr<TDirHandler> getMkDir(const Path& path);
+      std::shared_ptr<TDirHandle> getMkDir(const Path& path);
 
     private:
       std::string m_start;
       std::string m_mode;
-      std::map<std::string, std::shared_ptr<TFile>> m_openFiles;
+      std::map<std::string, std::shared_ptr<TFileHandle>> m_openFiles;
   }; //> end class FileHandler
 } //> end namespace TFileWalker
 

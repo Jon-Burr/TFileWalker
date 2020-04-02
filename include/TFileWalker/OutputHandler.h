@@ -20,8 +20,12 @@ namespace TFileWalker {
       const FileHandler& fileHandler() const { return m_fileHandler; }
       void write();
     private:
-      std::map<std::string, std::unique_ptr<Target>> m_targets;
+      // Note that the order of members here is *very* important. The
+      // FileHandler here is holding the file pointers for all of the targets,
+      // so if it goes out of scope before they're deleted we will get loads of
+      // segfaults
       FileHandler m_fileHandler;
+      std::map<std::string, std::unique_ptr<Target>> m_targets;
   }; //> end class OutputHandler
 
 } //> end namespace TFileWalker

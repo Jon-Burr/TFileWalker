@@ -8,7 +8,7 @@ namespace TFileWalker {
     outputDir()->directory()->WriteTObject(wrapped(), m_path.name().c_str() );
   }
 
-  Target::Target(const Path& outputPath, std::shared_ptr<TDirHandler> outputDir) :
+  Target::Target(const Path& outputPath, std::shared_ptr<TDirHandle> outputDir) :
     m_path(outputPath), m_outputDir(outputDir)
   {
   }

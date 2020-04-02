@@ -18,7 +18,8 @@ target_sources( TFileWalker
     src/Rule.cxx
     src/RuleParser.cxx
     src/Target.cxx
-    src/TDirHandler.cxx
+    src/TDirHandle.cxx
+    src/TFileHandle.cxx
     src/Walker.cxx)
 target_link_libraries( TFileWalker
   PUBLIC

@@ -1,4 +1,5 @@
 #include "TFileWalker/Rule.h"
+#include <iostream>
 
 namespace TFileWalker {
   void Rule::mergeTo(
@@ -8,10 +9,13 @@ namespace TFileWalker {
     if (!found)
       return;
     Target* target = output.find(found.outputPath);
-    if (target)
+    if (target) {
       target->merge(found.object);
-    else
+    }
+    else {
+      std::cout << "Create new target " << found.outputPath.fullName() << std::endl;
       output.add(
           found.outputPath, std::move(create(found, output.fileHandler() ) ) );
+    }
   }
 } //> end namespace TFileWalker

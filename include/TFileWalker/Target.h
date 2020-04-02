@@ -2,7 +2,7 @@
 #define TFileWalker_Target_H
 
 #include "TFileWalker/FileHandler.h"
-#include "TFileWalker/TDirHandler.h"
+#include "TFileWalker/TDirHandle.h"
 #include "TFileWalker/Path.h"
 #include <TDirectory.h>
 #include <string>
@@ -28,15 +28,15 @@ namespace TFileWalker {
       /// Write to the provided file
       virtual void write() const;
 
-      std::shared_ptr<TDirHandler> outputDir() const { return m_outputDir; }
+      std::shared_ptr<TDirHandle> outputDir() const { return m_outputDir; }
 
     protected:
       /// Create the target with its location in the output file
-      Target(const Path& outputPath, std::shared_ptr<TDirHandler> outputDir);
+      Target(const Path& outputPath, std::shared_ptr<TDirHandle> outputDir);
 
     private:
       Path m_path;
-      std::shared_ptr<TDirHandler> m_outputDir;
+      std::shared_ptr<TDirHandle> m_outputDir;
   }; //> end class Target
 
 } //> end namespace TFileWalker
