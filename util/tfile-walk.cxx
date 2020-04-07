@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
     ("inTxt,I", po::value(&inTxt), "Text file containing inputs")
     ("rules,R", po::value(&rulesTxt), "Text file containing a list of targets")
     ("in-loc", po::value(&inputLoc)->default_value(""), "The location for input files")
-    ("no-file-name-in-rules", po::bool_switch(&noFileNameInRules), "Rules do not reference the input file name")
+    ("no-file-name-in-rules,F", po::bool_switch(&noFileNameInRules), "Rules do not reference the input file name")
     ("help,h", "Print this message and exit");
   po::options_description hidden("Hidden options");
   hidden.add_options()
